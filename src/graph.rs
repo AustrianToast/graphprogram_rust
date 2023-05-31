@@ -1,44 +1,6 @@
 pub mod matrix;
 
-pub fn test() {
-    let mut adjazenz_matrix: Vec<Vec<usize>> = matrix::read_csv();
-    let distanz_matrix: Vec<Vec<usize>> = calculate_distanz_matrix(&adjazenz_matrix);
-    let weg_matrix: Vec<Vec<usize>> = calculate_weg_matrix(&adjazenz_matrix);
-
-    println!("adjazen matrix:");
-    matrix::show(&adjazenz_matrix);
-    println!("\ndistanz matrix:");
-    matrix::show(&distanz_matrix);
-    println!("\nweg matrix:");
-    matrix::show(&weg_matrix);
-
-    let exzentrizitaeten = calculate_exzentrizitaeten(&distanz_matrix);
-    let mut connected: bool = true;
-
-    if exzentrizitaeten.contains(&0) {
-        connected = false;
-    }
-    println!("\nis the graph connected: {connected}");
-    println!("exzentrizitäten: {:?}", exzentrizitaeten);
-
-    let properties = calculate_properties(&exzentrizitaeten);
-    let radius: usize = properties.0;
-    let diameter: usize = properties.1;
-    let centre: Vec<usize> = properties.2;
-
-    println!("radius: {radius}\ndiameter: {diameter}\ncentre: {:?}", centre);
-
-    let components = find_components(&weg_matrix);
-    println!("components: {:?}", components);
-
-    let bridges = find_bridges(&mut adjazenz_matrix, &components);
-    println!("bridges: {:?}", bridges);
-
-    let articulations = find_articulations(&adjazenz_matrix, &components);
-    println!("articulations: {:?}", articulations);
-}
-
-fn calculate_distanz_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
+pub fn calculate_distanz_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     let mut distanz_matrix: Vec<Vec<usize>> = vec![];
     let mut potenz_matrix = adjazenz_matrix.clone();
 
@@ -68,7 +30,7 @@ fn calculate_distanz_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>
     distanz_matrix
 }
 
-fn calculate_weg_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
+pub fn calculate_weg_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     let mut weg_matrix: Vec<Vec<usize>> = vec![];
     let mut potenz_matrix = adjazenz_matrix.clone();
 
@@ -98,7 +60,7 @@ fn calculate_weg_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     weg_matrix
 }
 
-fn calculate_exzentrizitaeten(distanz_matrix: &Vec<Vec<usize>>) -> Vec<usize> {
+pub fn calculate_exzentrizitaeten(distanz_matrix: &Vec<Vec<usize>>) -> Vec<usize> {
     let mut exzentrizitaeten: Vec<usize> = vec![];
     let mut exzentrizitaet: usize;
 
@@ -115,7 +77,7 @@ fn calculate_exzentrizitaeten(distanz_matrix: &Vec<Vec<usize>>) -> Vec<usize> {
     exzentrizitaeten
 }
 
-fn calculate_properties(exzentrizitaeten: &Vec<usize>) -> (usize, usize, Vec<usize>) {
+pub fn calculate_properties(exzentrizitaeten: &Vec<usize>) -> (usize, usize, Vec<usize>) {
     let mut radius: usize = usize::MAX;
     let mut diameter: usize = 0;
     let mut centre: Vec<usize> = vec![];
@@ -138,7 +100,7 @@ fn calculate_properties(exzentrizitaeten: &Vec<usize>) -> (usize, usize, Vec<usi
     results
 }
 
-fn find_components(weg_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
+pub fn find_components(weg_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     let mut components: Vec<Vec<usize>> = vec![];
     let mut component: Vec<usize>;
     
@@ -157,7 +119,7 @@ fn find_components(weg_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     components
 }
 
-fn find_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, components: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
+pub fn find_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, components: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     let mut bridges: Vec<Vec<usize>> = vec![];
     let mut bridge: Vec<usize>;
     let mut new_components: Vec<Vec<usize>>;
@@ -190,7 +152,7 @@ fn find_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, components: &Vec<Vec<usiz
     bridges
 }
 
-fn find_articulations(adjazenz_matrix: &Vec<Vec<usize>>, components: &Vec<Vec<usize>>) -> Vec<usize> {
+pub fn find_articulations(adjazenz_matrix: &Vec<Vec<usize>>, components: &Vec<Vec<usize>>) -> Vec<usize> {
     let mut articulations: Vec<usize> = vec![];
     let mut new_components: Vec<Vec<usize>>;
     let mut temp_matrix: Vec<Vec<usize>> = adjazenz_matrix.clone();

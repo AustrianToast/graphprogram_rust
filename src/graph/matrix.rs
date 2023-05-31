@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use std::{fs::File, io::Read};
 
 pub fn fill_with_random(matrix: &mut Vec<Vec<usize>>, size: usize) {
@@ -48,7 +49,7 @@ pub fn read_csv() -> Vec<Vec<usize>> {
         vec![0, 0, 0, 1, 0]
     ];
     /*
-        let mut csv = File::open("/home/rene/projects/Java/graphprogram/csv/art-brck.csv").unwrap();
+        let mut csv = File::open("").unwrap();
         let mut content = String::new();
         csv.read_to_string(&mut content).unwrap();
         println!("{content}");
@@ -60,30 +61,4 @@ pub fn read_csv() -> Vec<Vec<usize>> {
         See https://doc.rust-lang.org/std/fs/struct.File.html for file ops
     */
     matrix
-}
-
-pub fn test() {
-    let matrix1: Vec<Vec<usize>> = vec![
-        vec![0, 0, 1, 1, 0],
-        vec![0, 0, 1, 1, 0],
-        vec![1, 1, 0, 1, 0],
-        vec![1, 1, 1, 0, 1],
-        vec![0, 0, 0, 1, 0]
-    ];
-    let matrix2: Vec<Vec<usize>>;
-
-    matrix2 = matrix1.clone();
-    
-    println!("A:");
-    show(&matrix1);
-
-    let mut product: Vec<Vec<usize>> = mult(&matrix1, &matrix2);
-
-    println!("\nA²:");
-    show(&product);
-
-    product = mult(&product, &matrix1);
-
-    println!("\nA³:");
-    show(&product);
 }
