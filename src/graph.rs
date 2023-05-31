@@ -77,10 +77,11 @@ pub fn calculate_exzentrizitaeten(distanz_matrix: &Vec<Vec<usize>>) -> Vec<usize
     exzentrizitaeten
 }
 
-pub fn calculate_properties(exzentrizitaeten: &Vec<usize>) -> (usize, usize, Vec<usize>) {
+pub fn calculate_properties(exzentrizitaeten: &Vec<usize>) -> (usize, usize, Vec<usize>, bool) {
     let mut radius: usize = usize::MAX;
     let mut diameter: usize = 0;
     let mut centre: Vec<usize> = vec![];
+    let mut connected: bool = true;
     
     for i in 0..exzentrizitaeten.len() {
         if exzentrizitaeten[i] > diameter {
@@ -94,9 +95,11 @@ pub fn calculate_properties(exzentrizitaeten: &Vec<usize>) -> (usize, usize, Vec
             centre.clear();
             centre.push(i + 1);
         }
+        if exzentrizitaeten[i] == 0 {
+            connected = false;
+        }
     }
-
-    let results: (usize, usize, Vec<usize>) = (radius, diameter, centre);
+    let results: (usize, usize, Vec<usize>, bool) = (radius, diameter, centre, connected);
     results
 }
 
