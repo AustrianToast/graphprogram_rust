@@ -18,16 +18,16 @@ pub fn fill_with_random(size: usize) -> Vec<Vec<usize>> {
 
 pub fn mult(matrix1: &Vec<Vec<usize>>, matrix2: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     let mut product: Vec<Vec<usize>> = vec![];
-    let mut sum: usize;
+    let mut sum: u128;
 
     for i in 0..matrix1.len() {
         product.push(vec![]);
         for j in 0..matrix1.len() {
             sum = 0;
             for k in 0..matrix1.len() {
-                sum += matrix1[i][k] * matrix2[k][j];   
+                sum += (matrix1[i][k] * matrix2[k][j]) as u128;   
             }
-            product[i].push(sum);
+            product[i].push(sum as usize);
         }
     }
     product
