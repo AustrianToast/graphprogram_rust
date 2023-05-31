@@ -18,27 +18,18 @@ fn output() {
     graph::matrix::show(&weg_matrix);
 
     let exzentrizitaeten = graph::calculate_exzentrizitaeten(&distanz_matrix);
-    let mut connected: bool = true;
-
-    if exzentrizitaeten.contains(&0) {
-        connected = false;
-    }
-    println!("\nis the graph connected: {connected}");
-    println!("exzentrizitäten: {:?}", exzentrizitaeten);
-
     let properties = graph::calculate_properties(&exzentrizitaeten);
-    let radius: usize = properties.0;
-    let diameter: usize = properties.1;
-    let centre: Vec<usize> = properties.2;
 
-    println!("radius: {radius}\ndiameter: {diameter}\ncentre: {:?}", centre);
+    if properties.3 {
+        println!("\nexzentrizitäten: {:?}", exzentrizitaeten);
+        println!("radius: {}\ndiameter: {}\ncentre: {:?}", properties.0, properties.1, properties.2);
+    } else {
+        println!("\nexzentrizitäten: not connected");
+        println!("radius/diameter/centre: not connected");
+    }
 
-    let components = graph::find_components(&weg_matrix);
+    let components: Vec<Vec<usize>> = graph::find_components(&weg_matrix);
     println!("components: {:?}", components);
-
-    let bridges = graph::find_bridges(&mut adjazenz_matrix, &components);
-    println!("bridges: {:?}", bridges);
-
-    let articulations = graph::find_articulations(&adjazenz_matrix, &components);
-    println!("articulations: {:?}", articulations);
+    println!("bridges: {:?}", graph::find_bridges(&mut adjazenz_matrix, &components));
+    println!("articulations: {:?}", graph::find_articulations(&adjazenz_matrix, &components));
 }
