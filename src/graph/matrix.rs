@@ -1,3 +1,5 @@
+use std::{fs::File, io::Read};
+
 pub fn fill_with_random(matrix: &mut Vec<Vec<usize>>, size: usize) {
     for i in 0..size {
         matrix.push(vec![]);
@@ -39,25 +41,34 @@ pub fn show(matrix: &Vec<Vec<usize>>) {
 
 pub fn read_csv() -> Vec<Vec<usize>> {
     let matrix: Vec<Vec<usize>> = vec![
-        vec![0, 0, 1, 0, 0],
-        vec![0, 0, 1, 0, 1],
+        vec![0, 0, 1, 1, 0],
+        vec![0, 0, 1, 1, 0],
         vec![1, 1, 0, 1, 0],
-        vec![0, 0, 0, 0, 1],
-        vec![1, 1, 1, 0, 0]
-    ]; 
+        vec![1, 1, 1, 0, 1],
+        vec![0, 0, 0, 1, 0]
+    ];
     /*
-        See std::fs::File
+        let mut csv = File::open("/home/rene/projects/Java/graphprogram/csv/art-brck.csv").unwrap();
+        let mut content = String::new();
+        csv.read_to_string(&mut content).unwrap();
+        println!("{content}");
+
+        now I need regex to filter and put everything into a two dim vector
+
+        See https://crates.io/crates/regex for regex crate
+        See https://docs.rs/regex/1.8.3/regex/struct.Regex.html for regex crate documentation
+        See https://doc.rust-lang.org/std/fs/struct.File.html for file ops
     */
     matrix
 }
 
 pub fn test() {
     let matrix1: Vec<Vec<usize>> = vec![
-        vec![0, 0, 1, 0, 0],
-        vec![0, 0, 1, 0, 1],
+        vec![0, 0, 1, 1, 0],
+        vec![0, 0, 1, 1, 0],
         vec![1, 1, 0, 1, 0],
-        vec![0, 0, 0, 0, 1],
-        vec![1, 1, 1, 0, 0]
+        vec![1, 1, 1, 0, 1],
+        vec![0, 0, 0, 1, 0]
     ];
     let matrix2: Vec<Vec<usize>>;
 
