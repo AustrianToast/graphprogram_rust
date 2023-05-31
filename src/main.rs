@@ -10,7 +10,7 @@ fn output() {
     let distanz_matrix: Vec<Vec<usize>> = graph::calculate_distanz_matrix(&adjazenz_matrix);
     let weg_matrix: Vec<Vec<usize>> = graph::calculate_weg_matrix(&adjazenz_matrix);
 
-    println!("adjazen matrix:");
+    println!("adjazenz matrix:");
     graph::matrix::show(&adjazenz_matrix);
     println!("\ndistanz matrix:");
     graph::matrix::show(&distanz_matrix);
