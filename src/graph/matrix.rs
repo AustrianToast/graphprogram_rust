@@ -1,5 +1,6 @@
 #[allow(unused_imports)]
 use std::{fs::File, io::Read};
+use csv::ReaderBuilder;
 
 pub fn fill_with_random(size: usize) -> Vec<Vec<usize>> {
     let mut matrix: Vec<Vec<usize>> = vec![];
@@ -43,24 +44,23 @@ pub fn show(matrix: &Vec<Vec<usize>>) {
 }
 
 pub fn read_csv() -> Vec<Vec<usize>> {
-    let matrix: Vec<Vec<usize>> = vec![
-        vec![0, 0, 1, 1, 0],
-        vec![0, 0, 1, 1, 0],
-        vec![1, 1, 0, 1, 0],
-        vec![1, 1, 1, 0, 1],
-        vec![0, 0, 0, 1, 0]
-    ];
-    /*
-        let mut csv = File::open("").unwrap();
-        let mut content = String::new();
-        csv.read_to_string(&mut content).unwrap();
-        println!("{content}");
+    let mut matrix: Vec<Vec<usize>> = vec![];
+    let dir: String = String::from("/home/rene/projects/Java/graphprogram/csv/");
+    let file_path: String = dir + &String::from("art-brck.csv");
+    let mut csv = ReaderBuilder::new()
+        .has_headers(false)
+        .delimiter(b';')
+        .from_path(file_path)
+        .unwrap();
 
-        now I need regex to filter and put everything into a two dim vector
-
-        See https://crates.io/crates/regex for regex crate
-        See https://docs.rs/regex/1.8.3/regex/struct.Regex.html for regex crate documentation
-        See https://doc.rust-lang.org/std/fs/struct.File.html for file ops
-    */
+    let mut index = 0;
+    for result in csv.records() {
+        let record = result.unwrap();
+        matrix.push(vec![]);
+        for field in record.iter() {
+            matrix[index].push(field.parse().unwrap());
+        }
+        index += 1;
+    }
     matrix
 }
