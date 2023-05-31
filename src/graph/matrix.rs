@@ -1,7 +1,8 @@
 #[allow(unused_imports)]
 use std::{fs::File, io::Read};
 
-pub fn fill_with_random(matrix: &mut Vec<Vec<usize>>, size: usize) {
+pub fn fill_with_random(size: usize) -> Vec<Vec<usize>> {
+    let mut matrix: Vec<Vec<usize>> = vec![];
     for i in 0..size {
         matrix.push(vec![]);
         for j in 0..size {
@@ -12,6 +13,7 @@ pub fn fill_with_random(matrix: &mut Vec<Vec<usize>>, size: usize) {
             matrix[i].push(fastrand::usize(0..2));
         }
     }
+    matrix
 }
 
 pub fn mult(matrix1: &Vec<Vec<usize>>, matrix2: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
