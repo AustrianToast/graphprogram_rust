@@ -6,7 +6,7 @@ mod tests {
 
     #[test]
     fn graph() {
-        let mut adjazenz_matrix: Vec<Vec<usize>> = read_csv();
+        let mut adjazenz_matrix: Vec<Vec<usize>> = read_csv("art-brck.csv".to_owned());
         let distanz_matrix: Vec<Vec<usize>> = calculate_distanz_matrix(&adjazenz_matrix);
         let weg_matrix: Vec<Vec<usize>> = calculate_weg_matrix(&adjazenz_matrix);
         let exzentrizitaeten: Vec<usize> = calculate_exzentrizitaeten(&distanz_matrix);
@@ -46,7 +46,7 @@ mod tests {
 
     #[test]
     fn matrix() {
-        let adjazenz_matrix: Vec<Vec<usize>> = read_csv();
+        let adjazenz_matrix: Vec<Vec<usize>> = read_csv("art-brck.csv".to_owned());
         
         assert_eq!(adjazenz_matrix, vec![
             vec![0, 0, 1, 1, 0],

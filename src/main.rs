@@ -1,12 +1,9 @@
 pub mod graph;
 
 pub fn main() {
-    output();
-}
+    let file_name = String::from("50n.csv");
 
-// This is just for the pupose of visualising the output
-fn output() {
-    let mut adjazenz_matrix: Vec<Vec<usize>> = graph::matrix::read_csv();
+    let mut adjazenz_matrix: Vec<Vec<usize>> = graph::matrix::read_csv(file_name);
     let distanz_matrix: Vec<Vec<usize>> = graph::calculate_distanz_matrix(&adjazenz_matrix);
     let weg_matrix: Vec<Vec<usize>> = graph::calculate_weg_matrix(&adjazenz_matrix);
 

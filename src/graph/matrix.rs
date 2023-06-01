@@ -43,10 +43,10 @@ pub fn show(matrix: &Vec<Vec<usize>>) {
     }
 }
 
-pub fn read_csv() -> Vec<Vec<usize>> {
+pub fn read_csv(file_name: String) -> Vec<Vec<usize>> {
     let mut matrix: Vec<Vec<usize>> = vec![];
     let dir: String = String::from("/home/rene/projects/Java/graphprogram/csv/");
-    let file_path: String = dir + &String::from("art-brck.csv");
+    let file_path = dir + &file_name;
     let mut csv = ReaderBuilder::new()
         .has_headers(false)
         .delimiter(b';')
