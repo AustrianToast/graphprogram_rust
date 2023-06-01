@@ -68,7 +68,10 @@ pub fn calculate_exzentrizitaeten(distanz_matrix: &Vec<Vec<usize>>) -> Vec<usize
         exzentrizitaet = 0;
 
         for j in 0..distanz_matrix.len() {
-            if i != j && distanz_matrix[i][j] > exzentrizitaet {
+            if i == j || distanz_matrix[i][j] == usize::MAX {
+                continue;
+            }
+            if distanz_matrix[i][j] > exzentrizitaet {
                 exzentrizitaet = distanz_matrix[i][j];
             }
         }
@@ -129,7 +132,6 @@ pub fn find_articulations_and_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, com
     let mut new_components: Vec<Vec<usize>>;
     let mut temp_matrix: Vec<Vec<usize>> = adjazenz_matrix.clone();
     let mut weg_matrix: Vec<Vec<usize>>;
-    let mut done: bool = false;
 
     for n in 0..temp_matrix.len() {
         for i in 0..temp_matrix.len() {
@@ -137,7 +139,7 @@ pub fn find_articulations_and_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, com
                 temp_matrix[i][n] = 0;
                 temp_matrix[n][j] = 0;
 
-                if done || i == j {
+                if n != 0 {
                     continue;
                 }
                 bridge = vec![];
@@ -158,7 +160,6 @@ pub fn find_articulations_and_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, com
                 adjazenz_matrix[j][i] = prev_value;
             }
         }
-        done = true;
 
         weg_matrix = calculate_weg_matrix(&temp_matrix);
         new_components = find_components(&weg_matrix);
