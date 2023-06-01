@@ -12,6 +12,7 @@ mod tests {
         let exzentrizitaeten: Vec<usize> = calculate_exzentrizitaeten(&distanz_matrix);
         let properties = calculate_properties(&exzentrizitaeten);
         let components: Vec<Vec<usize>> = find_components(&weg_matrix);
+        let result = find_articulations_and_bridges(&mut adjazenz_matrix, &components);
 
         assert_eq!(adjazenz_matrix,  vec![
             vec![0, 0, 1, 1, 0],
@@ -40,8 +41,8 @@ mod tests {
         assert_eq!(properties.2, vec![4]);
         assert_eq!(properties.3, true);
         assert_eq!(components, vec![vec![1, 2, 3, 4, 5]]);
-        assert_eq!(find_bridges(&mut adjazenz_matrix, &components), vec![vec![4, 5]]);
-        assert_eq!(find_articulations(&adjazenz_matrix, &components), vec![4]);
+        assert_eq!(result.1, vec![vec![4, 5]]);
+        assert_eq!(result.0, vec![4]);
     }
 
     #[test]

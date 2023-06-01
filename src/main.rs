@@ -1,21 +1,24 @@
+use crate::graph::{*, matrix::*};
+
 pub mod graph;
 
 pub fn main() {
-    let file_name = String::from("50n.csv");
+    let file_name = String::from("art-brck.csv");
 
-    let mut adjazenz_matrix: Vec<Vec<usize>> = graph::matrix::read_csv(file_name);
-    let distanz_matrix: Vec<Vec<usize>> = graph::calculate_distanz_matrix(&adjazenz_matrix);
-    let weg_matrix: Vec<Vec<usize>> = graph::calculate_weg_matrix(&adjazenz_matrix);
+    let mut adjazenz_matrix: Vec<Vec<usize>> = read_csv(file_name);
+    //let mut adjazenz_matrix: Vec<Vec<usize>> = fill_with_random(100);
+    let distanz_matrix: Vec<Vec<usize>> = calculate_distanz_matrix(&adjazenz_matrix);
+    let weg_matrix: Vec<Vec<usize>> = calculate_weg_matrix(&adjazenz_matrix);
 
     println!("adjazen matrix:");
-    graph::matrix::show(&adjazenz_matrix);
+    show(&adjazenz_matrix);
     println!("\ndistanz matrix:");
-    graph::matrix::show(&distanz_matrix);
+    show(&distanz_matrix);
     println!("\nweg matrix:");
-    graph::matrix::show(&weg_matrix);
+    show(&weg_matrix);
 
-    let exzentrizitaeten = graph::calculate_exzentrizitaeten(&distanz_matrix);
-    let properties = graph::calculate_properties(&exzentrizitaeten);
+    let exzentrizitaeten = calculate_exzentrizitaeten(&distanz_matrix);
+    let properties = calculate_properties(&exzentrizitaeten);
 
     if properties.3 {
         println!("\nexzentrizitäten: {:?}", exzentrizitaeten);
@@ -25,8 +28,10 @@ pub fn main() {
         println!("radius/diameter/centre: not connected");
     }
 
-    let components: Vec<Vec<usize>> = graph::find_components(&weg_matrix);
+    let components: Vec<Vec<usize>> = find_components(&weg_matrix);
     println!("components: {:?}", components);
-    println!("bridges: {:?}", graph::find_bridges(&mut adjazenz_matrix, &components));
-    println!("articulations: {:?}", graph::find_articulations(&adjazenz_matrix, &components));
+
+    let result = find_articulations_and_bridges(&mut adjazenz_matrix, &components);
+    println!("bridges: {:?}", result.1);
+    println!("articulations: {:?}", result.0);
 }
