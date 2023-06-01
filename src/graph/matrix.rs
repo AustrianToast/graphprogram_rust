@@ -22,8 +22,10 @@ pub fn mult(matrix1: &Vec<Vec<usize>>, matrix2: &Vec<Vec<usize>>) -> Vec<Vec<usi
     let mut sum: u128;
 
     for i in 0..matrix1.len() {
-        product.push(vec![]);
         for j in 0..matrix1.len() {
+            if i == 0 {
+                product.push(vec![]);
+            }
             sum = 0;
             for k in 0..matrix1.len() {
                 sum += (matrix1[i][k] * matrix2[k][j]) as u128;   
@@ -43,7 +45,7 @@ pub fn show(matrix: &Vec<Vec<usize>>) {
     }
 }
 
-pub fn read_csv(file_name: String) -> Vec<Vec<usize>> {
+pub fn read_csv(file_name: &str) -> Vec<Vec<usize>> {
     let mut matrix: Vec<Vec<usize>> = vec![];
     let dir: String = String::from("/home/rene/projects/Java/graphprogram/csv/");
     let file_path = dir + &file_name;

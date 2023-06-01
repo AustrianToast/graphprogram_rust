@@ -108,14 +108,16 @@ pub fn calculate_properties(exzentrizitaeten: &Vec<usize>) -> (usize, usize, Vec
 pub fn find_components(weg_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     let mut components: Vec<Vec<usize>> = vec![];
     let mut component: Vec<usize>;
-    
-    for i in 0..weg_matrix.len() {
-        component = vec![];
+    let mut i: usize;
 
-        for j in 0..weg_matrix.len() {
-            if weg_matrix[i][j] == 1 {
-                component.push(j + 1);
+    for array in weg_matrix.iter() {
+        component = vec![];
+        i = 1;
+        for value in array.iter() {
+            if value == &1 {
+                component.push(i);
             }
+            i += 1;
         }
         if !components.contains(&component) {
             components.push(component);

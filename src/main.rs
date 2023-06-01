@@ -3,8 +3,7 @@ use crate::graph::{*, matrix::*};
 pub mod graph;
 
 pub fn main() {
-    let file_name = String::from("art-brck.csv");
-
+    let file_name = "24n.csv";
     let mut adjazenz_matrix: Vec<Vec<usize>> = read_csv(file_name);
     //let mut adjazenz_matrix: Vec<Vec<usize>> = fill_with_random(100);
     let distanz_matrix: Vec<Vec<usize>> = calculate_distanz_matrix(&adjazenz_matrix);
