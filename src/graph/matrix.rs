@@ -1,5 +1,3 @@
-#[allow(unused_imports)]
-use std::{fs::File, io::Read};
 use csv::ReaderBuilder;
 
 pub fn fill_with_random(size: usize) -> Vec<Vec<usize>> {
@@ -42,8 +40,8 @@ pub fn mult(matrix1: &Vec<Vec<usize>>, matrix2: &Vec<Vec<usize>>) -> Vec<Vec<usi
 
 pub fn show(matrix: &Vec<Vec<usize>>) {
     for vector in matrix {
-        for int in vector {
-            print!("{int} ");
+        for value in vector {
+            print!("{value} ");
         }
         println!();
     }
