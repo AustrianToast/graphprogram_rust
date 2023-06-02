@@ -8,3 +8,14 @@ edition = "2021"
 [dependencies]
 csv = "1.2.2"
 fastrand = "1.9.0"
+
+[profile.dev]
+opt-level = 3
+debug = false
+overflow-checks = false
+lto = "thin"
+panic = "unwind"
+incremental = true
+debug-assertions = false
+codegen-units = 64
+rpath = false

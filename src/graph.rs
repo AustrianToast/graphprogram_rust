@@ -60,7 +60,7 @@ pub fn calculate_weg_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>
     weg_matrix
 }
 
-pub fn calculate_exzentrizitaeten(distanz_matrix: &Vec<Vec<usize>>) -> Vec<usize> {
+pub fn calculate_exzentrizitaeten(distanz_matrix: Vec<Vec<usize>>) -> Vec<usize> {
     let mut exzentrizitaeten: Vec<usize> = vec![];
     let mut exzentrizitaet: usize;
 
@@ -105,16 +105,16 @@ pub fn calculate_properties(exzentrizitaeten: &Vec<usize>) -> (usize, usize, Vec
     (radius, diameter, centre, connected)
 }
 
-pub fn find_components(weg_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
+pub fn find_components(weg_matrix: Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     let mut components: Vec<Vec<usize>> = vec![];
     let mut component: Vec<usize>;
     let mut i: usize;
 
-    for array in weg_matrix.iter() {
+    for array in weg_matrix {
         component = vec![];
         i = 1;
-        for value in array.iter() {
-            if value == &1 {
+        for value in array {
+            if value == 1 {
                 component.push(i);
             }
             i += 1;
@@ -133,7 +133,6 @@ pub fn find_articulations_and_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, com
     let mut articulations: Vec<usize> = vec![];
     let mut new_components: Vec<Vec<usize>>;
     let mut temp_matrix: Vec<Vec<usize>> = adjazenz_matrix.clone();
-    let mut weg_matrix: Vec<Vec<usize>>;
 
     for n in 0..temp_matrix.len() {
         for i in 0..temp_matrix.len() {
@@ -152,8 +151,7 @@ pub fn find_articulations_and_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, com
                 adjazenz_matrix[i][j] = 0;
                 adjazenz_matrix[j][i] = 0;
                 
-                weg_matrix = calculate_weg_matrix(&adjazenz_matrix);
-                new_components = find_components(&weg_matrix);
+                new_components = find_components(calculate_weg_matrix(&adjazenz_matrix));
     
                 if new_components.len() > components.len() && !bridges.contains(&bridge) {
                     bridges.push(bridge);
@@ -163,8 +161,7 @@ pub fn find_articulations_and_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, com
             }
         }
 
-        weg_matrix = calculate_weg_matrix(&temp_matrix);
-        new_components = find_components(&weg_matrix);
+        new_components = find_components(calculate_weg_matrix(&temp_matrix));
 
         if new_components.len() > (components.len() + 1) {
             articulations.push(n + 1);

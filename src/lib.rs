@@ -9,10 +9,6 @@ mod tests {
         let mut adjazenz_matrix: Vec<Vec<usize>> = read_csv("art-brck.csv");
         let distanz_matrix: Vec<Vec<usize>> = calculate_distanz_matrix(&adjazenz_matrix);
         let weg_matrix: Vec<Vec<usize>> = calculate_weg_matrix(&adjazenz_matrix);
-        let exzentrizitaeten: Vec<usize> = calculate_exzentrizitaeten(&distanz_matrix);
-        let properties = calculate_properties(&exzentrizitaeten);
-        let components: Vec<Vec<usize>> = find_components(&weg_matrix);
-        let result = find_articulations_and_bridges(&mut adjazenz_matrix, &components);
 
         assert_eq!(adjazenz_matrix,  vec![
             vec![0, 0, 1, 1, 0],
@@ -35,6 +31,12 @@ mod tests {
             vec![1, 1, 1, 1, 1],
             vec![1, 1, 1, 1, 1]
         ]);
+
+        let exzentrizitaeten: Vec<usize> = calculate_exzentrizitaeten(distanz_matrix);
+        let properties = calculate_properties(&exzentrizitaeten);
+        let components: Vec<Vec<usize>> = find_components(weg_matrix);
+        let result = find_articulations_and_bridges(&mut adjazenz_matrix, &components);
+
         assert_eq!(exzentrizitaeten, vec![2, 2, 2, 1, 2]);
         assert_eq!(properties.0, 1);
         assert_eq!(properties.1, 2);

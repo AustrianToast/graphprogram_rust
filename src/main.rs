@@ -5,7 +5,7 @@ pub mod graph;
 pub fn main() {
     let file_name = "24n.csv";
     let mut adjazenz_matrix: Vec<Vec<usize>> = read_csv(file_name);
-    //let mut adjazenz_matrix: Vec<Vec<usize>> = fill_with_random(100);
+    //let mut adjazenz_matrix: Vec<Vec<usize>> = fill_with_random(45); // with this many verteces, it runs in about 10.2 seconds (2023-06-02 14:39)
     let distanz_matrix: Vec<Vec<usize>> = calculate_distanz_matrix(&adjazenz_matrix);
     let weg_matrix: Vec<Vec<usize>> = calculate_weg_matrix(&adjazenz_matrix);
 
@@ -16,7 +16,7 @@ pub fn main() {
     println!("\nweg matrix:");
     show(&weg_matrix);
 
-    let exzentrizitaeten = calculate_exzentrizitaeten(&distanz_matrix);
+    let exzentrizitaeten = calculate_exzentrizitaeten(distanz_matrix);
     let properties = calculate_properties(&exzentrizitaeten);
 
     if properties.3 {
@@ -27,7 +27,7 @@ pub fn main() {
         println!("radius/diameter/centre: not connected");
     }
 
-    let components: Vec<Vec<usize>> = find_components(&weg_matrix);
+    let components: Vec<Vec<usize>> = find_components(weg_matrix);
     println!("components: {:?}", components);
 
     let result = find_articulations_and_bridges(&mut adjazenz_matrix, &components);
