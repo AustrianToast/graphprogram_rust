@@ -1,28 +1,27 @@
+use self::matrix::clone;
+
 pub mod matrix;
 
-pub fn calculate_distanz_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
-    let mut distanz_matrix: Vec<Vec<usize>> = vec![];
-    let mut potenz_matrix = adjazenz_matrix.clone();
+pub fn calculate_distanz_matrix(adjazenz_matrix: &Vec<Vec<u8>>) -> Vec<Vec<u8>> {
+    let mut distanz_matrix: Vec<Vec<u8>> = vec![vec![]; adjazenz_matrix.len()];
+    let mut potenz_matrix = clone(adjazenz_matrix);
 
     for k in 1..adjazenz_matrix.len() {
-        potenz_matrix = matrix::mult(&potenz_matrix, &adjazenz_matrix);
+        potenz_matrix = matrix::mult(&potenz_matrix, adjazenz_matrix);
         for i in 0..adjazenz_matrix.len() {
-            if k == 1 {
-                distanz_matrix.push(vec![]);
-            }
             for j in 0..adjazenz_matrix.len() {
                 if k != 1 {
-                    if potenz_matrix[i][j] != 0 && distanz_matrix[i][j] == usize::MAX {
-                        distanz_matrix[i][j] = k;
+                    if potenz_matrix[i][j] != 0 && distanz_matrix[i][j] == u8::MAX {
+                        distanz_matrix[i][j] = u8::try_from(k).unwrap();
                     }
                     continue;
                 }
                 if i == j {
-                    distanz_matrix[i].push(0)
+                    distanz_matrix[i].push(0);
                 } else if adjazenz_matrix[i][j] == 1 {
                     distanz_matrix[i].push(1);
                 } else {
-                    distanz_matrix[i].push(usize::MAX);
+                    distanz_matrix[i].push(u8::MAX);
                 }
             }
         }
@@ -30,16 +29,13 @@ pub fn calculate_distanz_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<us
     distanz_matrix
 }
 
-pub fn calculate_weg_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
-    let mut weg_matrix: Vec<Vec<usize>> = vec![];
-    let mut potenz_matrix = adjazenz_matrix.clone();
+pub fn calculate_weg_matrix(adjazenz_matrix: &Vec<Vec<u8>>) -> Vec<Vec<u8>> {
+    let mut weg_matrix: Vec<Vec<u8>> = vec![vec![]; adjazenz_matrix.len()];
+    let mut potenz_matrix = clone(adjazenz_matrix);
 
     for k in 1..adjazenz_matrix.len() {
-        potenz_matrix = matrix::mult(&potenz_matrix, &adjazenz_matrix);
+        potenz_matrix = matrix::mult(&potenz_matrix, adjazenz_matrix);
         for i in 0..adjazenz_matrix.len() {
-            if k == 1 {
-                weg_matrix.push(vec![]);
-            }
             for j in 0..adjazenz_matrix.len() {
                 if k != 1 {
                     if potenz_matrix[i][j] != 0 {
@@ -47,9 +43,7 @@ pub fn calculate_weg_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>
                     }
                     continue;
                 }
-                if i == j {
-                    weg_matrix[i].push(1)
-                } else if adjazenz_matrix[i][j] == 1 {
+                if i == j || adjazenz_matrix[i][j] == 1 {
                     weg_matrix[i].push(1);
                 } else {
                     weg_matrix[i].push(0);
@@ -60,15 +54,15 @@ pub fn calculate_weg_matrix(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>
     weg_matrix
 }
 
-pub fn calculate_exzentrizitaeten(distanz_matrix: Vec<Vec<usize>>) -> Vec<usize> {
-    let mut exzentrizitaeten: Vec<usize> = vec![];
-    let mut exzentrizitaet: usize;
+pub fn calculate_exzentrizitaeten(distanz_matrix: Vec<Vec<u8>>) -> Vec<u8> {
+    let mut exzentrizitaeten: Vec<u8> = vec![];
+    let mut exzentrizitaet: u8;
 
     for vector in distanz_matrix {
         exzentrizitaet = 0;
 
         for value in vector {
-            if value == usize::MAX {
+            if value == u8::MAX {
                 continue;
             }
             exzentrizitaet = exzentrizitaet.max(value);
@@ -78,42 +72,40 @@ pub fn calculate_exzentrizitaeten(distanz_matrix: Vec<Vec<usize>>) -> Vec<usize>
     exzentrizitaeten
 }
 
-pub fn calculate_properties(exzentrizitaeten: &Vec<usize>) -> (usize, usize, Vec<usize>, bool) {
-    let mut radius: usize = usize::MAX;
-    let mut diameter: usize = 0;
-    let mut centre: Vec<usize> = vec![];
+pub fn calculate_properties(exzentrizitaeten: &[u8]) -> (u8, u8, Vec<u8>, bool) {
+    let mut radius = u8::MAX;
+    let mut diameter: u8 = 0;
+    let mut centre: Vec<u8> = vec![];
     let mut connected: bool = true;
 
-    for index in 0..exzentrizitaeten.len() {
-        let value = exzentrizitaeten[index];
-
-        if value > diameter {
-            diameter = value;
+    for (index, value) in exzentrizitaeten.iter().enumerate() {
+        if value > &diameter {
+            diameter = *value;
         }
-        if value == radius {
-            centre.push(index + 1);
+        if value == &radius {
+            centre.push(u8::try_from(index + 1).unwrap());
         }
-        if value < radius {
-            radius = value;
+        if value < &radius {
+            radius = *value;
             centre.clear();
-            centre.push(index + 1);
+            centre.push(u8::try_from(index + 1).unwrap());
         }
-        if value == 0 {
+        if value == &0 {
             connected = false;
         }
     }
     (radius, diameter, centre, connected)
 }
 
-pub fn find_components(weg_matrix: Vec<Vec<usize>>) -> Vec<Vec<usize>> {
-    let mut components: Vec<Vec<usize>> = vec![];
-    let mut component: Vec<usize>;
+pub fn find_components(weg_matrix: Vec<Vec<u8>>) -> Vec<Vec<u8>> {
+    let mut components: Vec<Vec<u8>> = vec![];
+    let mut component: Vec<u8>;
 
     for array in weg_matrix {
         component = vec![];
-        for index in 0..array.len() {
-            if array[index] == 1 {
-                component.push(index + 1);
+        for (index, value) in array.iter().enumerate() {
+            if value == &1 {
+                component.push(u8::try_from(index + 1).unwrap());
             }
         }
         if !components.contains(&component) {
@@ -123,10 +115,13 @@ pub fn find_components(weg_matrix: Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     components
 }
 
-pub fn find_articulations_and_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, components: &Vec<Vec<usize>>) -> (Vec<usize>,Vec<Vec<usize>>) {
-    let mut bridges: Vec<Vec<usize>> = vec![];
-    let mut articulations: Vec<usize> = vec![];
-    let mut temp_matrix: Vec<Vec<usize>> = adjazenz_matrix.clone();
+pub fn find_articulations_and_bridges(
+    adjazenz_matrix: &mut Vec<Vec<u8>>,
+    components: &Vec<Vec<u8>>,
+) -> (Vec<u8>, Vec<Vec<u8>>) {
+    let mut bridges: Vec<Vec<u8>> = vec![];
+    let mut articulations: Vec<u8> = vec![];
+    let mut temp_matrix = adjazenz_matrix.clone();
 
     for n in 0..temp_matrix.len() {
         for i in 0..temp_matrix.len() {
@@ -137,12 +132,17 @@ pub fn find_articulations_and_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, com
                 if n != 0 {
                     continue;
                 }
-                let bridge = vec![usize::min(i + 1, j + 1), usize::max(i + 1, j + 1)];
+                let bridge = vec![
+                    u8::try_from(usize::min(i + 1, j + 1)).unwrap(),
+                    u8::try_from(usize::max(i + 1, j + 1)).unwrap(),
+                ];
                 let prev_value = adjazenz_matrix[i][j];
                 adjazenz_matrix[i][j] = 0;
                 adjazenz_matrix[j][i] = 0;
-                    
-                if find_components(calculate_weg_matrix(&adjazenz_matrix)).len() > components.len() && !bridges.contains(&bridge) {
+
+                if find_components(calculate_weg_matrix(adjazenz_matrix)).len() > components.len()
+                    && !bridges.contains(&bridge)
+                {
                     bridges.push(bridge);
                 }
                 adjazenz_matrix[i][j] = prev_value;
@@ -151,7 +151,7 @@ pub fn find_articulations_and_bridges(adjazenz_matrix: &mut Vec<Vec<usize>>, com
         }
 
         if find_components(calculate_weg_matrix(&temp_matrix)).len() > (components.len() + 1) {
-            articulations.push(n + 1);
+            articulations.push(u8::try_from(n + 1).unwrap());
         }
         temp_matrix = adjazenz_matrix.clone();
     }
