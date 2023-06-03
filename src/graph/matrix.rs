@@ -1,6 +1,11 @@
 use csv::ReaderBuilder;
 
 pub fn fill_with_random(size: usize) -> Vec<Vec<u8>> {
+    assert!(
+        (size < u8::MAX.into() && size > 0),
+        "fill_with_random: size must not be bigger than 255 or smaller than 1, size was: {size}"
+    );
+
     let mut matrix: Vec<Vec<u8>> = vec![];
     for i in 0..size {
         matrix.push(vec![]);
@@ -25,9 +30,7 @@ pub fn mult(matrix1: &Vec<Vec<usize>>, matrix2: &Vec<Vec<u8>>) -> Vec<Vec<usize>
             vector.push(array[index].into());
         }
         for array in matrix1 {
-            let sum = array.iter().zip(vector.iter()).map(|(x, y)| x * y).sum();
-            //println!("{sum}");
-            product[k].push(sum);
+            product[k].push(array.iter().zip(vector.iter()).map(|(x, y)| x * y).sum());
         }
     }
     product

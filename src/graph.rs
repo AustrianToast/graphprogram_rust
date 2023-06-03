@@ -6,7 +6,7 @@ pub fn calculate_distanz_matrix(adjazenz_matrix: &Vec<Vec<u8>>) -> Vec<Vec<u8>> 
     let mut distanz_matrix: Vec<Vec<u8>> = vec![vec![]; adjazenz_matrix.len()];
     let mut potenz_matrix = clone(adjazenz_matrix);
 
-    for k in 1..adjazenz_matrix.len() {
+    for k in 1..(adjazenz_matrix.len() + 1) {
         potenz_matrix = matrix::mult(&potenz_matrix, adjazenz_matrix);
         for i in 0..adjazenz_matrix.len() {
             for j in 0..adjazenz_matrix.len() {
@@ -33,7 +33,7 @@ pub fn calculate_weg_matrix(adjazenz_matrix: &Vec<Vec<u8>>) -> Vec<Vec<u8>> {
     let mut weg_matrix: Vec<Vec<u8>> = vec![vec![]; adjazenz_matrix.len()];
     let mut potenz_matrix = clone(adjazenz_matrix);
 
-    for k in 1..adjazenz_matrix.len() {
+    for k in 1..(adjazenz_matrix.len() + 1) {
         potenz_matrix = matrix::mult(&potenz_matrix, adjazenz_matrix);
         for i in 0..adjazenz_matrix.len() {
             for j in 0..adjazenz_matrix.len() {

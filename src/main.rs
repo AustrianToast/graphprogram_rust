@@ -1,11 +1,15 @@
-use crate::graph::{*, matrix::{read_csv, show}};
+#[allow(unused_imports)]
+use crate::graph::{
+    matrix::{fill_with_random, read_csv, show},
+    *,
+};
 
 pub mod graph;
 
 pub fn main() {
-    let file_name = "24n.csv";
-    let mut adjazenz_matrix = read_csv(file_name);
-    //let mut adjazenz_matrix = fill_with_random(45); // with this many verteces, it runs in about 10.2 seconds (2023-06-02 14:39)
+    //let file_name = "50n.csv";
+    //let mut adjazenz_matrix = read_csv(file_name);
+    let mut adjazenz_matrix = fill_with_random(1); // with 48 verteces, it runs in about 10.2 seconds (run on the 2023-06-03 at 12:36)
     let distanz_matrix = calculate_distanz_matrix(&adjazenz_matrix);
     let weg_matrix = calculate_weg_matrix(&adjazenz_matrix);
 
