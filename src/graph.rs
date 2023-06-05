@@ -1,6 +1,4 @@
-use matrix::{clone, dfs_bridges, mult};
-
-use self::matrix::dfs_articulations;
+use matrix::{clone, dfs_articulations, dfs_bridges, mult};
 
 pub mod matrix;
 
