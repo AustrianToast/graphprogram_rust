@@ -45,28 +45,29 @@ pub fn dfs_bridges(
     low_time[vertex] = time;
 
     for neighbor in 0..adjazenz_matrix.len() {
-        if adjazenz_matrix[vertex][neighbor] != 1 || visited[neighbor] {
+        if adjazenz_matrix[vertex][neighbor] != 1 {
             continue;
         }
-        if neighbor != parent {
+        
+        if !visited[neighbor] {
+            dfs_bridges(
+                bridges,
+                adjazenz_matrix,
+                visited,
+                discovery_time,
+                low_time,
+                time,
+                neighbor,
+                vertex,
+            );
+    
+            low_time[vertex] = usize::min(low_time[vertex], low_time[neighbor]);
+    
+            if discovery_time[vertex] < low_time[neighbor] {
+                bridges.push(vec![vertex + 1, neighbor + 1]);
+            }
+        } else if neighbor != parent {
             low_time[vertex] = usize::min(low_time[vertex], discovery_time[neighbor]);
-        }
-
-        dfs_bridges(
-            bridges,
-            adjazenz_matrix,
-            visited,
-            discovery_time,
-            low_time,
-            time,
-            neighbor,
-            vertex,
-        );
-
-        low_time[vertex] = usize::min(low_time[vertex], low_time[neighbor]);
-
-        if discovery_time[vertex] < low_time[neighbor] {
-            bridges.push(vec![vertex + 1, neighbor + 1]);
         }
     }
 }
@@ -90,30 +91,30 @@ pub fn dfs_articulations(
     let mut articulation = false;
 
     for neighbor in 0..adjazenz_matrix.len() {
-        if visited[neighbor] || adjazenz_matrix[vertex][neighbor] != 1{
+        if adjazenz_matrix[vertex][neighbor] != 1{
             continue;
         }
-        if neighbor != parent {
+        if !visited[neighbor] {
+            child_count += 1;
+            dfs_articulations(
+                articulations,
+                is_articulation,
+                adjazenz_matrix,
+                visited,
+                discovery_time,
+                low_time,
+                time,
+                neighbor,
+                vertex,
+            );
+
+            low_time[vertex] = usize::min(low_time[vertex], low_time[neighbor]);
+
+            if parent != usize::MAX && discovery_time[vertex] <= low_time[neighbor] {
+                articulation = true;
+            }
+        } else if neighbor != parent {
             low_time[vertex] = usize::min(low_time[vertex], discovery_time[neighbor]);
-        }
-
-        child_count += 1;
-        dfs_articulations(
-            articulations,
-            is_articulation,
-            adjazenz_matrix,
-            visited,
-            discovery_time,
-            low_time,
-            time,
-            neighbor,
-            vertex,
-        );
-
-        low_time[vertex] = usize::min(low_time[vertex], low_time[neighbor]);
-
-        if discovery_time[vertex] <= low_time[neighbor] {
-            articulation = true;
         }
     }
 
