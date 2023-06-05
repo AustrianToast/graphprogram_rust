@@ -90,8 +90,11 @@ pub fn dfs_articulations(
     let mut articulation = false;
 
     for neighbor in 0..adjazenz_matrix.len() {
-        if visited[neighbor] || neighbor == parent || parent == usize::MAX {
+        if visited[neighbor] || adjazenz_matrix[vertex][neighbor] != 1{
             continue;
+        }
+        if neighbor != parent {
+            low_time[vertex] = usize::min(low_time[vertex], discovery_time[neighbor]);
         }
 
         child_count += 1;
@@ -103,8 +106,8 @@ pub fn dfs_articulations(
             discovery_time,
             low_time,
             time,
+            neighbor,
             vertex,
-            parent,
         );
 
         low_time[vertex] = usize::min(low_time[vertex], low_time[neighbor]);
@@ -114,7 +117,7 @@ pub fn dfs_articulations(
         }
     }
 
-    if parent != usize::MAX && child_count > 1 {
+    if parent == usize::MAX && child_count > 1 {
         articulation = true;
     }
 
