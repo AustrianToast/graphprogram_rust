@@ -7,13 +7,13 @@ use crate::graph::{
 pub mod graph;
 
 pub fn main() {
-    //let file_name = "50n.csv";
-    //let mut adjazenz_matrix = read_csv(file_name);
-    let mut adjazenz_matrix = fill_with_random(1); // with 48 verteces, it runs in about 10.2 seconds (run on the 2023-06-03 at 12:36)
+    let file_name = "24n.csv";
+    let adjazenz_matrix = read_csv(file_name);
+    //let adjazenz_matrix = fill_with_random(320); // with 320 verteces, it runs in about 10 seconds on an Intel i5-10300H @4.3 GHz (2023-06-05 15:48)
     let distanz_matrix = calculate_distanz_matrix(&adjazenz_matrix);
     let weg_matrix = calculate_weg_matrix(&adjazenz_matrix);
 
-    println!("adjazen matrix:");
+    println!("adjazenz matrix:");
     show(&adjazenz_matrix);
     println!("\ndistanz matrix:");
     show(&distanz_matrix);
@@ -37,7 +37,6 @@ pub fn main() {
     let components = find_components(weg_matrix);
     println!("components: {components:?}");
 
-    let result = find_articulations_and_bridges(&mut adjazenz_matrix, &components);
-    println!("bridges: {:?}", result.1);
-    println!("articulations: {:?}", result.0);
+    println!("bridges: {:?}", find_bridges(&adjazenz_matrix));
+    println!("articulations: {:?}", find_articulations(&adjazenz_matrix));
 }

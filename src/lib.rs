@@ -6,7 +6,7 @@ mod tests {
 
     #[test]
     fn graph() {
-        let mut adjazenz_matrix = read_csv("art-brck.csv");
+        let adjazenz_matrix = read_csv("art-brck.csv");
         let distanz_matrix = calculate_distanz_matrix(&adjazenz_matrix);
         let weg_matrix = calculate_weg_matrix(&adjazenz_matrix);
 
@@ -44,7 +44,8 @@ mod tests {
         let exzentrizitaeten = calculate_exzentrizitaeten(distanz_matrix);
         let properties = calculate_properties(&exzentrizitaeten);
         let components = find_components(weg_matrix);
-        let result = find_articulations_and_bridges(&mut adjazenz_matrix, &components);
+        let bridges = find_bridges(&adjazenz_matrix);
+        let articulations = find_articulations(&adjazenz_matrix);
 
         assert_eq!(exzentrizitaeten, vec![2, 2, 2, 1, 2]);
         assert_eq!(properties.0, 1);
@@ -52,8 +53,8 @@ mod tests {
         assert_eq!(properties.2, vec![4]);
         assert_eq!(properties.3, true);
         assert_eq!(components, vec![vec![1, 2, 3, 4, 5]]);
-        assert_eq!(result.1, vec![vec![4, 5]]);
-        assert_eq!(result.0, vec![4]);
+        assert_eq!(bridges, vec![vec![4, 5]]);
+        assert_eq!(articulations, vec![4]);
     }
 
     #[test]
