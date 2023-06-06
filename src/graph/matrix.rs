@@ -34,7 +34,7 @@ pub fn dfs_bridges(
     adjazenz_matrix: &Vec<Vec<usize>>,
     visited: &mut Vec<bool>,
     discovery_time: &mut Vec<usize>,
-    low_time: &mut Vec<usize>,
+    lowest_time: &mut Vec<usize>,
     time: usize,
     vertex: usize,
     parent: usize,
@@ -42,39 +42,40 @@ pub fn dfs_bridges(
     let time = time + 1;
     visited[vertex] = true;
     discovery_time[vertex] = time;
-    low_time[vertex] = time;
+    lowest_time[vertex] = time;
 
     for neighbor in 0..adjazenz_matrix.len() {
         if adjazenz_matrix[vertex][neighbor] != 1 {
             continue;
         }
-        
-        if !visited[neighbor] {
-            dfs_bridges(
-                bridges,
-                adjazenz_matrix,
-                visited,
-                discovery_time,
-                low_time,
-                time,
-                neighbor,
-                vertex,
-            );
-    
-            low_time[vertex] = usize::min(low_time[vertex], low_time[neighbor]);
-    
-            if discovery_time[vertex] < low_time[neighbor] {
-                bridges.push(vec![vertex + 1, neighbor + 1]);
-            }
-        } else if neighbor != parent {
-            low_time[vertex] = usize::min(low_time[vertex], discovery_time[neighbor]);
+        if parent != neighbor && visited[neighbor] {
+            lowest_time[vertex] = usize::min(lowest_time[vertex], discovery_time[neighbor]);
+            continue;
+        }
+        if visited[neighbor] {
+            continue;
+        }
+        dfs_bridges(
+            bridges,
+            adjazenz_matrix,
+            visited,
+            discovery_time,
+            lowest_time,
+            time,
+            neighbor,
+            vertex,
+        );
+        lowest_time[vertex] = usize::min(lowest_time[vertex], lowest_time[neighbor]);
+
+        if discovery_time[vertex] < lowest_time[neighbor] {
+            bridges.push(vec![vertex + 1, neighbor + 1]);
         }
     }
 }
 
 pub fn dfs_articulations(
     articulations: &mut Vec<usize>,
-    is_articulation: &mut Vec<bool>,
+    is_articulation_vector: &mut Vec<bool>,
     adjazenz_matrix: &Vec<Vec<usize>>,
     visited: &mut Vec<bool>,
     discovery_time: &mut Vec<usize>,
@@ -88,42 +89,39 @@ pub fn dfs_articulations(
     discovery_time[vertex] = time;
     low_time[vertex] = time;
     let mut child_count: usize = 0;
-    let mut articulation = false;
+    let mut is_articulation = false;
 
     for neighbor in 0..adjazenz_matrix.len() {
         if adjazenz_matrix[vertex][neighbor] != 1{
             continue;
         }
-        if !visited[neighbor] {
-            child_count += 1;
-            dfs_articulations(
-                articulations,
-                is_articulation,
-                adjazenz_matrix,
-                visited,
-                discovery_time,
-                low_time,
-                time,
-                neighbor,
-                vertex,
-            );
-
-            low_time[vertex] = usize::min(low_time[vertex], low_time[neighbor]);
-
-            if parent != usize::MAX && discovery_time[vertex] <= low_time[neighbor] {
-                articulation = true;
-            }
-        } else if neighbor != parent {
+        if visited[neighbor] {
             low_time[vertex] = usize::min(low_time[vertex], discovery_time[neighbor]);
+            continue;
+        }
+        child_count += 1;
+        dfs_articulations(
+            articulations,
+            is_articulation_vector,
+            adjazenz_matrix,
+            visited,
+            discovery_time,
+            low_time,
+            time,
+            neighbor,
+            vertex,
+        );
+        low_time[vertex] = usize::min(low_time[vertex], low_time[neighbor]);
+
+        if parent != usize::MAX && discovery_time[vertex] <= low_time[neighbor] {
+            is_articulation = true;
         }
     }
-
     if parent == usize::MAX && child_count > 1 {
-        articulation = true;
+        is_articulation = true;
     }
-
-    if articulation {
-        is_articulation[vertex] = true;
+    if is_articulation {
+        is_articulation_vector[vertex] = true;
         articulations.push(vertex + 1);
     }
 }

@@ -120,7 +120,7 @@ pub fn find_bridges(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
     let mut bridges: Vec<Vec<usize>> = vec![];
     let mut visited = vec![false; size];
     let mut discovery_time = vec![0; size];
-    let mut low_time = vec![0; size];
+    let mut lowest_time = vec![0; size];
     let time = 0;
 
     for i in 0..size {
@@ -130,7 +130,7 @@ pub fn find_bridges(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
                 adjazenz_matrix,
                 &mut visited,
                 &mut discovery_time,
-                &mut low_time,
+                &mut lowest_time,
                 time,
                 i,
                 usize::MAX,
@@ -144,7 +144,7 @@ pub fn find_bridges(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<Vec<usize>> {
 pub fn find_articulations(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<usize> {
     let size = adjazenz_matrix.len();
     let mut ariculations = vec![];
-    let mut is_articulation = vec![false; size];
+    let mut is_articulation_vector = vec![false; size];
     let mut visited = vec![false; size];
     let mut discovery_time = vec![0; size];
     let mut low_time = vec![0; size];
@@ -154,7 +154,7 @@ pub fn find_articulations(adjazenz_matrix: &Vec<Vec<usize>>) -> Vec<usize> {
         if !visited[i] {
             dfs_articulations(
                 &mut ariculations,
-                &mut is_articulation,
+                &mut is_articulation_vector,
                 adjazenz_matrix,
                 &mut visited,
                 &mut discovery_time,
