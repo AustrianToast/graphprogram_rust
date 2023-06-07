@@ -1,3 +1,5 @@
+use std::env::args;
+
 #[allow(unused_imports)]
 use crate::graph::{
     matrix::{fill_with_random, read_csv, show},
@@ -7,9 +9,14 @@ use crate::graph::{
 pub mod graph;
 
 pub fn main() {
-    let file_name = "24n.csv";
-    let adjazenz_matrix = read_csv(file_name);
-    //let adjazenz_matrix = fill_with_random(320); // with 320 verteces, it runs in about 10 seconds on an Intel i5-10300H @4.3 GHz (2023-06-05 15:48)
+    let args: Vec<String> = args().collect();
+    let adjazenz_matrix: Vec<Vec<usize>>;
+    
+    if args[1].trim().parse::<usize>().is_ok() {
+        adjazenz_matrix = fill_with_random(args[1].parse::<usize>().unwrap()); // with 320 verteces, it runs in about 10 seconds on an Intel i5-10300H @4.3 GHz (2023-06-05 15:48)
+    } else {
+        adjazenz_matrix = read_csv(&args[1]);
+    }
     let distanz_matrix = calculate_distanz_matrix(&adjazenz_matrix);
     let weg_matrix = calculate_weg_matrix(&adjazenz_matrix);
 

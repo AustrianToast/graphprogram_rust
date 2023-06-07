@@ -148,13 +148,12 @@ pub fn show(matrix: &Vec<Vec<usize>>) {
     }
 }
 
-pub fn read_csv(file_name: &str) -> Vec<Vec<usize>> {
+pub fn read_csv(file: &str) -> Vec<Vec<usize>> {
     let mut matrix: Vec<Vec<usize>> = vec![];
-    let dir: String = "/home/rene/projects/Java/graphprogram/csv/".into();
     let mut csv = csv::ReaderBuilder::new()
         .has_headers(false)
         .delimiter(b';')
-        .from_path(dir + file_name)
+        .from_path(file)
         .unwrap();
 
     for (index, result) in csv.records().enumerate() {

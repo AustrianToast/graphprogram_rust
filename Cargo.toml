@@ -3,8 +3,6 @@ name = "graphprogram_rust"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 csv = "1.2.2"
 fastrand = "1.9.0"
@@ -19,3 +17,4 @@ incremental = true
 debug-assertions = false
 codegen-units = 64
 rpath = false
+strip = true

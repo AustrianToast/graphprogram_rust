@@ -6,7 +6,7 @@ mod tests {
 
     #[test]
     fn graph() {
-        let adjazenz_matrix = read_csv("art-brck.csv");
+        let adjazenz_matrix = read_csv("/home/rene/projects/Java/graphprogram/csv/art-brck.csv");
         let distanz_matrix = calculate_distanz_matrix(&adjazenz_matrix);
         let weg_matrix = calculate_weg_matrix(&adjazenz_matrix);
 
